@@ -483,13 +483,65 @@ function Library.CreateWindow(_, options)
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		Position = UDim2.fromOffset(0, Config.HeaderHeight + 10),
-		Size = UDim2.new(1, -1, 1, -(Config.HeaderHeight + 20)),
+		Size = UDim2.new(1, -1, 1, -(Config.HeaderHeight + 20 + 62)),
 		CanvasSize = UDim2.new(),
 		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 		ScrollBarThickness = 0,
 		ScrollingDirection = Enum.ScrollingDirection.Y,
 		Parent = sidebar,
 	}, { list(6), padding(0, 10, 0, 10) })
+
+	local profile = new("Frame", {
+		BackgroundColor3 = Theme.Card,
+		BorderSizePixel = 0,
+		Position = UDim2.new(0, 10, 1, -58),
+		Size = UDim2.new(1, -21, 0, 48),
+		Parent = sidebar,
+	}, { corner(6), stroke(Theme.Border, 0.35) })
+	local profileAvatar = new("ImageLabel", {
+		BackgroundColor3 = Theme.Control,
+		BorderSizePixel = 0,
+		Position = UDim2.fromOffset(8, 8),
+		Size = UDim2.fromOffset(32, 32),
+		Parent = profile,
+	}, { corner(16) })
+	self.ProfileName = text({
+		Position = UDim2.fromOffset(46, 7),
+		Size = UDim2.new(1, -52, 0, 15),
+		Text = "",
+		Font = Fonts.Bold,
+		TextSize = 12,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = profile,
+	})
+	self.ProfileUser = text({
+		Position = UDim2.fromOffset(46, 23),
+		Size = UDim2.new(1, -52, 0, 14),
+		Text = "",
+		TextColor3 = Theme.Muted,
+		Font = Fonts.Medium,
+		TextSize = 11,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = profile,
+	})
+	task.spawn(function()
+		while profile.Parent do
+			local ok, plr = pcall(function() return Players.LocalPlayer end)
+			if ok and plr then
+				self.ProfileName.Text = plr.DisplayName
+				self.ProfileUser.Text = "@" .. plr.Name
+				if profileAvatar.Image == "" then
+					local ok2, thumb = pcall(function()
+						return Players:GetUserThumbnailAsync(plr.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
+					end)
+					if ok2 and thumb then
+						profileAvatar.Image = thumb
+					end
+				end
+			end
+			task.wait(2)
+		end
+	end)
 
 	self.Content = new("Frame", {
 		BackgroundTransparency = 1,
