@@ -1,4 +1,4 @@
--- Rivals Lib
+-- Rivals lib
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -7,7 +7,7 @@ local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 
 local Config = {
-	Folder = "Slimey Hub",
+	Folder = "Slimey Hub/Rivals",
 	WindowSize = Vector2.new(720, 470),
 	HeaderHeight = 52,
 	SidebarWidth = 164,
@@ -431,11 +431,14 @@ function Library.CreateWindow(_, options)
 
 	do
 		local LogoURL  = "https://i.postimg.cc/Qdd58K1d/slime-transparent.png"
-		local LogoPath = "Slimey Hub/logo.png"
+		local LogoPath = "Slimey Hub/Rivals/logo.png"
 
 		task.spawn(function()
 			if not isfolder("Slimey Hub") then
 				pcall(makefolder, "Slimey Hub")
+			end
+			if not isfolder("Slimey Hub/Rivals") then
+				pcall(makefolder, "Slimey Hub/Rivals")
 			end
 
 			if not isfile(LogoPath) then
